@@ -27,7 +27,7 @@ app.get('/api/v1/whisper/:id', async (req, res) => {
   if (!whisper) {
     res.sendStatus(404);
   } else {
-    res.json({ whisper });
+    res.json(whisper);
   }
 });
 
