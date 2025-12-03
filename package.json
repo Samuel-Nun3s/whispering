@@ -11,7 +11,9 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "lint": "standard",
-    "lint:fix": "standard --fix"
+    "lint:fix": "standard --fix",
+    "infra:start": "docker-compose up -d --build",
+    "infra:stop": "docker-compose down --remove-orphans"
   },
   "standard": {
     "env": [
