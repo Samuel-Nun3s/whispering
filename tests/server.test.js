@@ -1,12 +1,32 @@
 import supertest from "supertest";
 import { app } from "../server.js";
-import { restoreDb, populateDb } from "./utils.js";
-import { whispers, inventedId, existingId } from "./fixtures.js";
 import { getById } from "../store.js";
+import { restoreDb, populateDb, getFixtures, ensureDbConnection, normalize, closeDbConnection } from "./utils.js";
+
+let whispers;
+let inventedId;
+let existingId;
 
 describe('Server', () => {
-  beforeEach(() => populateDb(whispers));
-  afterAll(restoreDb);
+  beforeAll(ensureDbConnection);
+  beforeEach(async () => {
+    await restoreDb();
+    await populateDb(whispers);
+    const fixtures = await getFixtures();
+    whispers = fixtures.whispers;
+    inventedId = fixtures.inventedId;
+    existingId = fixtures.existingId;
+  });
+  afterAll(closeDbConnection);
+
+  describe("GET /about", () => {
+    it('Should return a 200 with the total whispers in the platform', async () => {
+      const response = await supertest(app)
+        .get('/about');
+      expect(response.status).toBe(200);
+      expect(response.text).toContain(`Currently there are ${whispers.length} whispers available`);
+    });
+  });
 
   describe("GET /api/v1/whisper", () => {
     it("Should return an empty array when there's no data", async () => {
@@ -48,19 +68,15 @@ describe('Server', () => {
       expect(response.status).toBe(400);
     });
     it("Should return a 201 when the whisper is created", async () => {
-      const newWhisper = {
-        id: whispers.length + 1,
-        message: "This is a new whisper"
-      }
-
+      const newWhisper = { message: "This is a new whisper" };
       const response = await supertest(app)
         .post("/api/v1/whisper")
         .send({ message: newWhisper.message });
       expect(response.status).toBe(201);
-      expect(response.body).toEqual(newWhisper);
+      expect(response.body.message).toEqual(newWhisper.message);
 
-      const storedWhisper = await getById(newWhisper.id);
-      expect(storedWhisper).toStrictEqual(newWhisper);
+      const storedWhisper = await getById(response.body.id);
+      expect(normalize(storedWhisper).message).toStrictEqual(newWhisper.message);
     });
   });
 
@@ -90,7 +106,7 @@ describe('Server', () => {
       expect(response.status).toBe(200);
 
       const storedWhisper = await getById(existingId);
-      expect(storedWhisper).toStrictEqual({ id: existingId, message: "Whisper updated" });
+      expect(normalize(storedWhisper)).toStrictEqual({ id: existingId, message: "Whisper updated" });
     });
   });
 
@@ -106,7 +122,7 @@ describe('Server', () => {
       expect(response.status).toBe(200);
 
       const storedWhisper = await getById(existingId);
-      expect(storedWhisper).toBeUndefined();
+      expect(storedWhisper).toBe(null);
     });
   });
 });

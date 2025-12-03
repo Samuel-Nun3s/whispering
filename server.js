@@ -21,7 +21,7 @@ app.get('/api/v1/whisper', async (req, res) => {
 });
 
 app.get('/api/v1/whisper/:id', async (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = req.params.id;
   const whisper = await getById(id);
 
   if (!whisper) {
@@ -44,7 +44,7 @@ app.post('/api/v1/whisper', async (req, res) => {
 
 app.put('/api/v1/whisper/:id', async (req, res) => {
   const { message } = req.body;
-  const id = parseInt(req.params.id);
+  const id = req.params.id;
 
   if (!message) {
     res.sendStatus(400);
@@ -60,7 +60,7 @@ app.put('/api/v1/whisper/:id', async (req, res) => {
 });
 
 app.delete('/api/v1/whisper/:id', async (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = req.params.id;
   const whisper = await getById(id);
 
   if (!whisper) {
