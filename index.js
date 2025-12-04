@@ -1,14 +1,14 @@
-import { app } from "./server.js";
-import mongoose from "mongoose";
+import { app } from './server.js'
+import mongoose from 'mongoose'
 
-const port = process.env.PORT;
+const port = process.env.PORT
 
 try {
-  await mongoose.connect(process.env.MONGO_DB_URI);
-  console.log('Connected to MongoDB');
+  await mongoose.connect(process.env.MONGODB_URI)
+  console.log('Connected to MongoDB')
   app.listen(port, () => {
-    console.log(`Running in http://localhost:${port}`);
-  });
+    console.log(`Running in http://localhost:${port}`)
+  })
 } catch (error) {
-  console.error(error);
+  console.error(error)
 }
