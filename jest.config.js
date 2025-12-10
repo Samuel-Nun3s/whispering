@@ -1,8 +1,8 @@
 export default {
   modulePathIgnorePatterns: ['<rootDir>/node_test/'],
-  testEnvironment: "node",
+  testEnvironment: 'node',
   transform: {},
   coveragePathIgnorePatterns: [
-    "<rootDir>/tests/"
+    '<rootDir>/tests/'
   ]
 }
