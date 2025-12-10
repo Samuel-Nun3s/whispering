@@ -34,9 +34,7 @@ app.post('/login', async (req, res) => {
 app.post('/signup', async (req, res) => {
   try {
     const { username, email, password } = req.body
-    console.log(`username => ${username}, email => ${email}, password => ${password}`);
-    const newUser = await user.create(username, password, email);
-    console.log('newUser =>', newUser);
+    const newUser = await user.create(username, password, email)
     const accessToken = generateToken({ username, id: newUser._id })
     res.json({ accessToken })
   } catch (err) {
