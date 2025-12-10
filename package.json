@@ -12,8 +12,8 @@
     "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage --setupFiles dotenv/config",
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "infra:start": "docker-compose up -d --build",
-    "infra:stop": "docker-compose down --remove-orphans"
+    "infra:start": "docker compose up -d --build",
+    "infra:stop": "docker compose down --remove-orphans"
   },
   "standard": {
     "env": [
