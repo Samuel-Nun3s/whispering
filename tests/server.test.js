@@ -253,6 +253,7 @@ describe('Server', () => {
         .put(`/api/v1/whisper/${existingId}`)
         .set('Authentication', `Bearer ${firstUser.token}`)
         .send({ message: 'Whisper updated' })
+
       expect(response.status).toBe(200)
 
       // Database changes
