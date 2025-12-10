@@ -263,7 +263,7 @@ describe('Server', () => {
       expect(normalizedWhisper.message).toBe('Whisper updated')
     })
   })
-  
+
   describe('DELETE /api/v1/whisper/:id', () => {
     it("Should return a 404 when the whisper doesn't exist", async () => {
       const response = await supertest(app)
